@@ -3,9 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/javaproject/parking-haui/2_Project_QLCoiXeHaUI/src/database/DBConnect.java</file>
-            <file>file:/D:/javaproject/parking-haui/2_Project_QLCoiXeHaUI/src/view/Revenue.java</file>
+            <file>file:/D:/javaproject/parking-haui/2_Project_QLCoiXeHaUI/src/dao/AccountDAO.java</file>
+            <file>file:/D:/javaproject/parking-haui/2_Project_QLCoiXeHaUI/src/view/LoginStaff.java</file>
             <file>file:/D:/javaproject/parking-haui/2_Project_QLCoiXeHaUI/src/view/BarChart.java</file>
+            <file>file:/D:/javaproject/parking-haui/2_Project_QLCoiXeHaUI/src/view/Revenue.java</file>
+            <file>file:/D:/javaproject/parking-haui/2_Project_QLCoiXeHaUI/src/view/UserManagement.java</file>
+            <file>file:/D:/javaproject/parking-haui/2_Project_QLCoiXeHaUI/src/view/Checkin.java</file>
+            <file>file:/D:/javaproject/parking-haui/2_Project_QLCoiXeHaUI/src/view/Checkout.java</file>
         </group>
     </open-files>
 </project-private>

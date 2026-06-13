@@ -234,10 +234,7 @@ public class LoginAdmin extends javax.swing.JFrame {
         String pass = new String(txtPassword.getPassword());
 
         try {
-            Connection conn = DBConnect.getConnection();
-            AccountDAO dao = new AccountDAO(conn);
-            Account acc = dao.login(user, pass);
-
+            model.Account acc = dao.AccountDAO.login(user, pass);
             if (acc != null && "Admin".equalsIgnoreCase(acc.getRole())) {
                 JOptionPane.showMessageDialog(this, "Log in successfully (ADMIN)");
                 this.dispose();
@@ -245,8 +242,6 @@ public class LoginAdmin extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(this, "Incorrect username, password or not an Admin!", "Login Failed", JOptionPane.ERROR_MESSAGE);
             }
-
-            conn.close();
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error connecting to database!", "Error", JOptionPane.ERROR_MESSAGE);

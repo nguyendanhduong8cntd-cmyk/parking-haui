@@ -11,6 +11,7 @@ import java.awt.*;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import net.sourceforge.tess4j.TesseractException;
 
 public class Checkin extends javax.swing.JFrame {
 
@@ -158,7 +159,20 @@ public class Checkin extends javax.swing.JFrame {
         this.dispose();
         new HomeStaff().setVisible(true);
     }
-
+    private void readImage(File imageFile) {
+        ITesseract tesseract = new Tesseract();
+        tesseract.setDatapath("./tessdata"); 
+        tesseract.setLanguage("eng");
+        try {
+            String result = tesseract.doOCR(imageFile).replaceAll("[\\r\\n]+", " ").trim();
+            if (txtLicensePlate != null) {
+                txtLicensePlate.setText(result);
+            }
+        } catch (TesseractException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Text from image not recognized: " + ex.getMessage(), "Error OCR", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     private void btnCheckinActionPerformed() {
         String ticketID = txtTicketID.getText().trim();
         String licensePlate = txtLicensePlate.getText().trim();
@@ -206,66 +220,21 @@ public class Checkin extends javax.swing.JFrame {
             System.exit(0);
         }
     }
-
     // 🌟 ĐÃ SỬA LỖI ĐƯỜNG DẪN TESSDATA ĐỂ TRANH LỖI "INVALID MEMORY ACCESS"
     private void btnImageActionPerformed() {
-        JFileChooser chooser = new JFileChooser("src/licensePlate");
-        chooser.setFileFilter(new FileNameExtensionFilter("Hình ảnh xe", "png", "jpg", "jpeg"));
+         JFileChooser chooser = new JFileChooser("src/licensePlate");
+        chooser.setFileFilter(new FileNameExtensionFilter("Image files", "png", "jpg", "jpeg"));
         int option = chooser.showOpenDialog(this);
 
         if (option == JFileChooser.APPROVE_OPTION) {
             File selectedFile = chooser.getSelectedFile();
 
-            // 1. Điền thông tin thời gian, mã vé và hiển thị hình ảnh lên khung trước
+            displayImage(selectedFile);
             generateTicketID();
             fillInfo();
-            displayImage(selectedFile);
-
-            // Tạm thời vô hiệu hóa nút xác nhận và hiển thị trạng thái chờ xử lý cho người dùng
-            btnCheckin.setEnabled(false);
-            txtLicensePlate.setText("Đang chạy OCR nhận diện...");
-
-            // 2. Sử dụng SwingWorker chạy nền xử lý ảnh tránh gây treo luồng chính (EDT Thread)
-            new javax.swing.SwingWorker<String, Void>() {
-                @Override
-                protected String doInBackground() throws Exception {
-                    ITesseract tesseract = new Tesseract();
-
-                    // 🌟 VÁ LỖI CỐT LÕI: Lấy đường dẫn tuyệt đối chính xác của thư mục tessdata trên máy tính
-                    String absoluteTessdataPath = new java.io.File("tessdata").getAbsolutePath();
-                    tesseract.setDatapath(absoluteTessdataPath);
-                    tesseract.setLanguage("eng"); // Sử dụng bộ dữ liệu ngôn ngữ tiếng Anh
-
-                    String rawOcr = tesseract.doOCR(selectedFile);
-                    // Lọc sạch các ký tự lạ, xuống dòng, chỉ giữ lại chữ, số và dấu gạch ngang của biển số xe
-                    return rawOcr.replaceAll("[^a-zA-Z0-9-]", "").trim();
-                }
-
-                @Override
-                protected void done() {
-                    try {
-                        String finalPlate = get();
-                        if (finalPlate.isEmpty()) {
-                            txtLicensePlate.setText("");
-                            JOptionPane.showMessageDialog(Checkin.this, "Không nhận diện được ký tự, vui lòng nhập tay!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-                        } else {
-                            txtLicensePlate.setText(finalPlate); // Đổ kết quả biển số sạch vào textfield
-                        }
-                    } catch (Exception ex) {
-                        txtLicensePlate.setText("");
-                        JOptionPane.showMessageDialog(Checkin.this, "Lỗi OCR nhận diện ảnh: " + ex.getMessage(), "Lỗi hệ thống", JOptionPane.ERROR_MESSAGE);
-                    } finally {
-                        btnCheckin.setEnabled(true); // Mở khóa lại nút bấm khi hoàn thành tác vụ
-
-                        // Ép Form làm tươi lại giao diện để hiện chữ ngay lập tức
-                        panelForm.revalidate();
-                        panelForm.repaint();
-                    }
-                }
-            }.execute();
+            readImage(selectedFile);
         }
     }
-
     private void styleUI() {
         getContentPane().setBackground(new java.awt.Color(236, 240, 241));
         panelForm.setBackground(new java.awt.Color(236, 240, 241));

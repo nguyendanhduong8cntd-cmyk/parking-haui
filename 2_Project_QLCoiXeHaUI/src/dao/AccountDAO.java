@@ -14,11 +14,6 @@ public class AccountDAO {
     public AccountDAO(Connection conn) {
         this.conn = conn;
     }
-
-    /**
-     * 1. Kiểm tra tài khoản đăng nhập hợp lệ (Admin / Staff)
-     * Đã chuyển sang dạng static và sửa chuẩn cú pháp try-with-resources song song hai tài nguyên
-     */
     public static Account login(String username, String password) {
         String sql = "SELECT * FROM account WHERE username = ? AND password = ?";
 
@@ -41,9 +36,7 @@ public class AccountDAO {
         return null;
     }
 
-    /**
-     * 2. Thêm tài khoản nhân viên mới vào hệ thống bãi xe (Quyền Admin thực hiện)
-     */
+  
     public static boolean insertAccount(Account acc) {
         String sql = "INSERT INTO account (username, password, role) VALUES (?, ?, ?)";
 
@@ -61,9 +54,6 @@ public class AccountDAO {
         return false;
     }
 
-    /**
-     * 3. Đổi mật khẩu tài khoản trực ca (Quyền Admin cấp lại hoặc người dùng tự đổi)
-     */
     public static boolean updatePassword(String username, String newPassword) {
         String sql = "UPDATE account SET password = ? WHERE username = ?";
 
@@ -82,10 +72,7 @@ public class AccountDAO {
         return false;
     }
 
-    /**
-     * 4. Lấy danh sách tất cả Username hiện có trong hệ thống
-     * Hàm này dùng để nạp danh sách người dùng vào JComboBox hiển thị trên giao diện đổi mật khẩu
-     */
+   
     public static ArrayList<String> getAllUsernames() {
         ArrayList<String> list = new ArrayList<>();
         String sql = "SELECT username FROM account ORDER BY role, username";

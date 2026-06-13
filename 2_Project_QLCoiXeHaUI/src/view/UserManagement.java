@@ -414,50 +414,95 @@ public class UserManagement extends javax.swing.JFrame {
     }
     private void styleUI() {
 
-    // ===== BACKGROUND =====
-    getContentPane().setBackground(new java.awt.Color(236, 240, 241));
+    // ===== 1. CẤU HÌNH BACKGROUND & LAYOUT (CHỐNG BỊ CHE KHUẤT) =====
+    java.awt.Color bgLight = new java.awt.Color(245, 247, 250); // Nền xám trắng Modern UI
+    getContentPane().setBackground(bgLight);
+    jPanel1.setBackground(bgLight);
+    jPanel2.setBackground(bgLight);
+    jPanel3.setBackground(bgLight);
 
-    // ===== TITLE =====
-    jLabel1.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 30));
+    // Ép kích thước chuẩn cho JScrollPane chứa bảng, không cho GroupLayout chèn ép chiều cao
+    jScrollPane1.setPreferredSize(new java.awt.Dimension(649, 240)); 
+    jScrollPane1.setMinimumSize(new java.awt.Dimension(649, 180));
+    jScrollPane1.setBackground(java.awt.Color.WHITE);
+    jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(218, 223, 230), 1));
+
+    // Bỏ kích thước ép cứng 80px cũ của NetBeans trên JTable để nó tự co giãn thoải mái
+    tblUser.setPreferredSize(null); 
+    tblUser.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+
+    // Xóa sạch 4 dòng trống (null) mặc định ban đầu để bảng sạch sẽ trước khi bấm Display
+    javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tblUser.getModel();
+    model.setRowCount(0);
+
+    // ===== 2. TIÊU ĐỀ CHỮ (TITLE) =====
+    jLabel1.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 28));
     jLabel1.setForeground(new java.awt.Color(44, 62, 80));
 
-    // ===== LABELS =====
-    jLabel2.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 16));
+    // ===== 3. LABELS KHU VỰC NHẬP LIỆU =====
+    jLabel2.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 15));
     jLabel2.setForeground(new java.awt.Color(52, 73, 94));
 
-    jLabel3.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 16));
+    jLabel3.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 15));
     jLabel3.setForeground(new java.awt.Color(52, 73, 94));
 
-    // ===== TEXTFIELD =====
+    // ===== 4. Ô NHẬP LIỆU (TEXTFIELD) =====
+    // Thêm EmptyBorder (Padding nội bộ) 8px để chữ không dính chặt vào viền ô
+    javax.swing.border.Border fieldBorder = javax.swing.BorderFactory.createCompoundBorder(
+        javax.swing.BorderFactory.createLineBorder(new java.awt.Color(189, 195, 199), 1),
+        javax.swing.BorderFactory.createEmptyBorder(0, 8, 0, 8)
+    );
     txtUserName.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
+    txtUserName.setBorder(fieldBorder);
     txtPassword.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
+    txtPassword.setBorder(fieldBorder);
 
-    // ===== TABLE STYLE =====
+    // ===== 5. ĐỊNH DẠNG BẢNG DỮ LIỆU (TABLE STYLE) =====
     tblUser.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
-    tblUser.setRowHeight(25);
-    tblUser.setGridColor(new java.awt.Color(189, 195, 199));
-    tblUser.setSelectionBackground(new java.awt.Color(52, 152, 219));
+    tblUser.setRowHeight(32); // Tăng lên 32px cho khoảng cách hàng cực kỳ thoáng và rõ nét
+    tblUser.setGridColor(new java.awt.Color(230, 233, 237));
+    tblUser.setSelectionBackground(new java.awt.Color(41, 128, 185)); // Màu Classic Blue đồng bộ
     tblUser.setSelectionForeground(java.awt.Color.WHITE);
+    tblUser.setShowGrid(true);
 
-    // ===== HEADER CENTER =====
+    // ĐỊNH DẠNG HEADER BẢNG
     javax.swing.table.JTableHeader header = tblUser.getTableHeader();
     header.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
-    header.setBackground(new java.awt.Color(52, 152, 219));
+    header.setBackground(new java.awt.Color(52, 73, 94)); // Màu xanh xám đậm nam tính
     header.setForeground(java.awt.Color.WHITE);
+    header.setPreferredSize(new java.awt.Dimension(header.getPreferredSize().width, 35)); // Tạo độ dày tiêu đề
 
-    javax.swing.table.DefaultTableCellRenderer renderer =
+    // Căn giữa tiêu đề hàng
+    javax.swing.table.DefaultTableCellRenderer headerRenderer =
             (javax.swing.table.DefaultTableCellRenderer) header.getDefaultRenderer();
-    renderer.setHorizontalAlignment(javax.swing.JLabel.CENTER);
+    headerRenderer.setHorizontalAlignment(javax.swing.JLabel.CENTER);
 
-    // ===== BUTTON STYLE - TOP =====
-    styleButton(btnDisplay, new java.awt.Color(52, 152, 219));
-    styleButton(btnReset, new java.awt.Color(241, 196, 15));
-    styleButton(btnExit, new java.awt.Color(231, 76, 60));
-    styleButton(btnBack, new java.awt.Color(155, 89, 182));
+    // ===== 6. ĐỒNG BỘ MÀU SẮC CHO CÁC NÚT BẤM (BUTTONS) =====
+    styleButton(btnDisplay, new java.awt.Color(41, 128, 185)); // Classic Blue chuyên nghiệp
+    styleButton(btnReset, new java.awt.Color(230, 126, 34));   // Cam ấm áp, dễ nhìn text trắng
+    styleButton(btnExit, new java.awt.Color(231, 76, 60));     // Đỏ Pastel mạnh mẽ
+    styleButton(btnBack, new java.awt.Color(142, 68, 173));    // Tím hoàng gia thanh lịch
 
-    // ===== BUTTON STYLE - SIDE =====
-    styleButton(btnAdd, new java.awt.Color(46, 204, 113));
-    styleButton(btnDelete, new java.awt.Color(231, 76, 60));
+    styleButton(btnAdd, new java.awt.Color(46, 204, 113));     // Xanh lá tươi tắn (Thêm mới)
+    styleButton(btnDelete, new java.awt.Color(192, 57, 43));   // Đỏ thẫm sắc nét (Xóa bỏ)
+
+    // ===== 7. VIỀN PANEL PHẲNG (TINH TẾ & FLAT) =====
+    java.awt.Font borderFont = new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12);
+    java.awt.Color borderLineColor = new java.awt.Color(218, 223, 230);
+
+    jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(
+        javax.swing.BorderFactory.createLineBorder(borderLineColor, 1), " Thông tin tài khoản ", 
+        javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, borderFont, new java.awt.Color(127, 140, 141)
+    ));
+    
+    jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(
+        javax.swing.BorderFactory.createLineBorder(borderLineColor, 1), " Quản lý ", 
+        javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, borderFont, new java.awt.Color(127, 140, 141)
+    ));
+
+    // ===== 8. TÍNH TOÁN LẠI TOÀN BỘ KHUNG GIAO DIỆN =====
+    this.pack(); // Ép giao diện ghim chặt theo các PreferredSize mới chỉnh sửa
+    this.setLocationRelativeTo(null); // Luôn mở ở tâm màn hình
     }
     private void styleButton(javax.swing.JButton btn, java.awt.Color color) {
 

@@ -263,7 +263,6 @@ public class Revenue extends javax.swing.JFrame {
 
     private void btnChitietActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChitietActionPerformed
         String input = txtInput.getText().trim();
-    
     // Nếu ô nhập bị bỏ trống, nhắc nhở điền năm
     if (input.isEmpty()) {
         javax.swing.JOptionPane.showMessageDialog(this, "Vui lòng nhập năm (hoặc mm-yyyy) vào ô điều kiện!", "Thông báo", javax.swing.JOptionPane.WARNING_MESSAGE);
@@ -299,46 +298,83 @@ public class Revenue extends javax.swing.JFrame {
         });
     }
     private void styleUI() {
+// ===== 1. CẤU HÌNH BACKGROUND & LAYOUT (CHỐNG BỊ CHE KHUẤT) =====
+    java.awt.Color bgLight = new java.awt.Color(245, 247, 250); // Màu nền xám trắng cực sang của Modern UI
+    getContentPane().setBackground(bgLight);
+    jPanel1.setBackground(bgLight);
+    jPanel2.setBackground(bgLight);
 
-    // ===== BACKGROUND =====
-    getContentPane().setBackground(new java.awt.Color(236, 240, 241));
-    jPanel1.setBackground(new java.awt.Color(236, 240, 241));
-    jPanel2.setBackground(new java.awt.Color(236, 240, 241));
+    // Ép chiều cao tối thiểu cho Khung cuộn chứa bảng (JScrollPane) để không bị GroupLayout bóp nghẹt
+    jScrollPane1.setPreferredSize(new java.awt.Dimension(657, 280)); 
+    jScrollPane1.setMinimumSize(new java.awt.Dimension(657, 200));
+    jScrollPane1.setBackground(java.awt.Color.WHITE);
+    jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(218, 223, 230), 1));
 
-    // ===== TITLE =====
+    // Bỏ thuộc tính kích thước cứng cũ của table để nó tự co giãn theo JScrollPane
+    tblRevenue.setPreferredSize(null); 
+    tblRevenue.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+
+    // ===== 2. TIÊU ĐỀ CHỮ (TITLE) =====
     jLabel1.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 26));
-    jLabel1.setForeground(new java.awt.Color(44, 62, 80));
+    jLabel1.setForeground(new java.awt.Color(44, 62, 80)); // Màu Charcoal tối giản
 
-    // ===== INPUT FIELD =====
+    // ===== 3. Ô NHẬP LIỆU (INPUT FIELD) =====
     txtInput.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
-    txtInput.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(189, 195, 199)));
+    // Tạo Border có khoảng đệm (Padding) phía trong để gõ chữ không bị dính sát viền
+    txtInput.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+        javax.swing.BorderFactory.createLineBorder(new java.awt.Color(189, 195, 199), 1),
+        javax.swing.BorderFactory.createEmptyBorder(0, 8, 0, 8)
+    ));
 
-    // ===== COMBOBOX =====
+    // ===== 4. COMBOBOX THỜI GIAN & PHƯƠNG TIỆN =====
     styleComboBox(cboType);
     styleComboBox(cboVehicles);
 
-    // ===== TABLE STYLE =====
+    // ===== 5. ĐỊNH DẠNG BẢNG DOANH THU (TABLE REVENUE) =====
     tblRevenue.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 13));
-    tblRevenue.setRowHeight(25);
-    tblRevenue.setGridColor(new java.awt.Color(189, 195, 199));
-    tblRevenue.setSelectionBackground(new java.awt.Color(52, 152, 219));
+    tblRevenue.setRowHeight(32); // 👈 Tăng từ 25 lên 32px để dữ liệu thoáng, không bao giờ lo bị che chữ
+    tblRevenue.setGridColor(new java.awt.Color(230, 233, 237)); // Đường lưới mảnh dịu mắt
+    tblRevenue.setSelectionBackground(new java.awt.Color(41, 128, 185)); // Màu Classic Blue khớp với BarChart
     tblRevenue.setSelectionForeground(java.awt.Color.WHITE);
+    tblRevenue.setShowGrid(true);
 
-    // HEADER STYLE
+    // ĐỊNH DẠNG HEADER CỦA BẢNG
     javax.swing.table.JTableHeader header = tblRevenue.getTableHeader();
     header.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
-    header.setBackground(new java.awt.Color(52, 73, 94));
+    header.setBackground(new java.awt.Color(52, 73, 94)); // Màu nền tiêu đề nam tính thanh lịch
     header.setForeground(java.awt.Color.WHITE);
+    header.setPreferredSize(new java.awt.Dimension(header.getPreferredSize().width, 35)); // Tăng độ dày Header
 
-    // ===== BUTTON STYLE =====
-    styleButton(btnCheck, new java.awt.Color(46, 204, 113));   // xanh lá
-    styleButton(btnReset, new java.awt.Color(241, 196, 15));   // vàng
-    styleButton(btnBack, new java.awt.Color(52, 152, 219));    // xanh dương
-    styleButton(btnExit, new java.awt.Color(231, 76, 60));     // đỏ
+    // Căn giữa chữ trên thanh Header
+    javax.swing.table.DefaultTableCellRenderer headerRenderer =
+        (javax.swing.table.DefaultTableCellRenderer) header.getDefaultRenderer();
+    headerRenderer.setHorizontalAlignment(javax.swing.JLabel.CENTER);
 
-    // ===== PANEL BORDER (nhẹ thôi) =====
-    jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Filter"));
-    jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Actions"));
+    // ===== 6. THAY ĐỔI MÀU SẮC ĐỒNG BỘ CHO NÚT BẤM (BUTTONS) =====
+    styleButton(btnCheck, new java.awt.Color(46, 204, 113));   // Xanh lá (Hoàn thành)
+    styleButton(btnReset, new java.awt.Color(230, 126, 34));   // Cam Modern (Thay cho màu vàng chói mắt cũ)
+    styleButton(btnBack, new java.awt.Color(41, 128, 185));    // Classic Blue (Đồng bộ với BarChart)
+    styleButton(btnExit, new java.awt.Color(231, 76, 60));     // Đỏ Pastel (Cảnh báo)
+    styleButton(btnChitiet, new java.awt.Color(142, 68, 173)); // Tím thời thượng cho nút Bar Chart
+
+    // ===== 7. ĐƯỜNG VIỀN PANEL (TINH TẾ & FLAT) =====
+    // Thay đổi border thô mặc định thành border phẳng màu xám nhạt kèm font Segoe UI mượt mà
+    java.awt.Font borderFont = new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12);
+    java.awt.Color borderLineColor = new java.awt.Color(218, 223, 230);
+
+    jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(
+        javax.swing.BorderFactory.createLineBorder(borderLineColor, 1), " Bộ lọc thống kê ", 
+        javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, borderFont, new java.awt.Color(127, 140, 141)
+    ));
+    
+    jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(
+        javax.swing.BorderFactory.createLineBorder(borderLineColor, 1), " Thao tác chức năng ", 
+        javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, borderFont, new java.awt.Color(127, 140, 141)
+    ));
+
+    // ===== 8. TÍNH TOÁN LẠI TOÀN BỘ KHUNG GIAO DIỆN =====
+    this.pack(); // Buộc Java Swing cập nhật lại đúng kích thước chuẩn sau khi style
+    this.setLocationRelativeTo(null); // Giữa màn hình thẳng tiến
 }
     private void styleButton(javax.swing.JButton btn, java.awt.Color color) {
 
