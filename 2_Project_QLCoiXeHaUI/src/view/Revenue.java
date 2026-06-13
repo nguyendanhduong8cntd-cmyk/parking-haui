@@ -41,6 +41,7 @@ public class Revenue extends javax.swing.JFrame {
         btnExit = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        btnChitiet = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -165,6 +166,13 @@ public class Revenue extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 26)); // NOI18N
         jLabel1.setText("Thống kê thu nhập");
 
+        btnChitiet.setText("Bar Chart");
+        btnChitiet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChitietActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -172,13 +180,16 @@ public class Revenue extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(252, 252, 252)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(43, 43, 43)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 657, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 657, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(209, 209, 209)
+                                    .addComponent(jLabel1)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnChitiet))
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -188,7 +199,9 @@ public class Revenue extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(12, 12, 12)
-                .addComponent(jLabel1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(btnChitiet, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -247,6 +260,35 @@ public class Revenue extends javax.swing.JFrame {
     private void cboVehiclesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboVehiclesActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cboVehiclesActionPerformed
+
+    private void btnChitietActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChitietActionPerformed
+        String input = txtInput.getText().trim();
+    
+    // Nếu ô nhập bị bỏ trống, nhắc nhở điền năm
+    if (input.isEmpty()) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Vui lòng nhập năm (hoặc mm-yyyy) vào ô điều kiện!", "Thông báo", javax.swing.JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    int namHopLe = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR); // Năm dự phòng mặc định
+    try {
+        if (input.contains("-")) {
+            // Nếu nhập dạng "06-2026", cắt lấy chuỗi sau dấu gạch ngang làm năm
+            String[] parts = input.split("-");
+            namHopLe = Integer.parseInt(parts[parts.length - 1].trim());
+        } else {
+            // Nếu chỉ gõ thuần số năm như "2026"
+            namHopLe = Integer.parseInt(input);
+        }
+    } catch (Exception e) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Định dạng năm nhập vào không đúng! Ví dụ đúng: 2026 hoặc 06-2026", "Lỗi định dạng", javax.swing.JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    // Khởi tạo BarChart truyền chuẩn số năm đã bốc tách sang
+    BarChart chartFrame = new BarChart(namHopLe);
+    chartFrame.setVisible(true);
+    }//GEN-LAST:event_btnChitietActionPerformed
 
     public static void main(String args[]) {
 
@@ -315,6 +357,7 @@ public class Revenue extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnCheck;
+    private javax.swing.JButton btnChitiet;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnReset;
     private javax.swing.JComboBox<String> cboType;
