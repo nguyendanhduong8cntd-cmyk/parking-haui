@@ -43,7 +43,7 @@ public class Checkin extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }
 
-    // Hàm tự động tính toán pixel và dựng giao diện, triệt tiêu hoàn toàn lỗi layout NetBeans
+    // Hàm tự động tính toán pixel và dựng giao diện, GIỮ NGUYÊN BỐ CỤC TUYỆT ĐỐI CỦA BẠN
     private void initComponentsCustom() {
         jLabel1 = new javax.swing.JLabel("CHECK IN");
         panelForm = new javax.swing.JPanel();
@@ -130,10 +130,11 @@ public class Checkin extends javax.swing.JFrame {
     }
 
     private void displayImage(File imageFile) {
-        if (imageFile != null) {
+        if (imageFile != null && lblImage.getWidth() > 0 && lblImage.getHeight() > 0) {
             ImageIcon icon = new ImageIcon(imageFile.getAbsolutePath());
             Image img = icon.getImage().getScaledInstance(lblImage.getWidth(), lblImage.getHeight(), Image.SCALE_SMOOTH);
             lblImage.setIcon(new ImageIcon(img));
+            lblImage.repaint(); // Đảm bảo hình ảnh được vẽ lại ngay lập tức
         }
     }
 
@@ -165,8 +166,8 @@ public class Checkin extends javax.swing.JFrame {
         String date = txtDate.getText().trim();
         String checkin = txtCheckin.getText().trim();
 
-        if (ticketID.isEmpty() || licensePlate.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng quét chọn ảnh xe vào bãi trước!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+        if (ticketID.isEmpty() || licensePlate.isEmpty() || licensePlate.equals("Đang chạy OCR nhận diện...")) {
+            JOptionPane.showMessageDialog(this, "Vui lòng quét chọn ảnh xe và chờ nhận diện biển số trước!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -206,6 +207,7 @@ public class Checkin extends javax.swing.JFrame {
         }
     }
 
+    // 🌟 ĐÃ SỬA LỖI ĐƯỜNG DẪN TESSDATA ĐỂ TRANH LỖI "INVALID MEMORY ACCESS"
     private void btnImageActionPerformed() {
         JFileChooser chooser = new JFileChooser("src/licensePlate");
         chooser.setFileFilter(new FileNameExtensionFilter("Hình ảnh xe", "png", "jpg", "jpeg"));
@@ -214,32 +216,50 @@ public class Checkin extends javax.swing.JFrame {
         if (option == JFileChooser.APPROVE_OPTION) {
             File selectedFile = chooser.getSelectedFile();
 
-            displayImage(selectedFile);
+            // 1. Điền thông tin thời gian, mã vé và hiển thị hình ảnh lên khung trước
             generateTicketID();
             fillInfo();
+            displayImage(selectedFile);
 
+            // Tạm thời vô hiệu hóa nút xác nhận và hiển thị trạng thái chờ xử lý cho người dùng
             btnCheckin.setEnabled(false);
             txtLicensePlate.setText("Đang chạy OCR nhận diện...");
 
-            // Đọc ảnh luồng ngầm tránh đơ giao diện
+            // 2. Sử dụng SwingWorker chạy nền xử lý ảnh tránh gây treo luồng chính (EDT Thread)
             new javax.swing.SwingWorker<String, Void>() {
                 @Override
                 protected String doInBackground() throws Exception {
                     ITesseract tesseract = new Tesseract();
-                    tesseract.setDatapath("./tessdata");
-                    tesseract.setLanguage("eng");
-                    return tesseract.doOCR(selectedFile).replaceAll("[\\r\\n]+", " ").trim();
+
+                    // 🌟 VÁ LỖI CỐT LÕI: Lấy đường dẫn tuyệt đối chính xác của thư mục tessdata trên máy tính
+                    String absoluteTessdataPath = new java.io.File("tessdata").getAbsolutePath();
+                    tesseract.setDatapath(absoluteTessdataPath);
+                    tesseract.setLanguage("eng"); // Sử dụng bộ dữ liệu ngôn ngữ tiếng Anh
+
+                    String rawOcr = tesseract.doOCR(selectedFile);
+                    // Lọc sạch các ký tự lạ, xuống dòng, chỉ giữ lại chữ, số và dấu gạch ngang của biển số xe
+                    return rawOcr.replaceAll("[^a-zA-Z0-9-]", "").trim();
                 }
 
                 @Override
                 protected void done() {
                     try {
-                        txtLicensePlate.setText(get());
+                        String finalPlate = get();
+                        if (finalPlate.isEmpty()) {
+                            txtLicensePlate.setText("");
+                            JOptionPane.showMessageDialog(Checkin.this, "Không nhận diện được ký tự, vui lòng nhập tay!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                        } else {
+                            txtLicensePlate.setText(finalPlate); // Đổ kết quả biển số sạch vào textfield
+                        }
                     } catch (Exception ex) {
                         txtLicensePlate.setText("");
-                        JOptionPane.showMessageDialog(Checkin.this, "Lỗi OCR nhận diện ảnh: " + ex.getMessage());
+                        JOptionPane.showMessageDialog(Checkin.this, "Lỗi OCR nhận diện ảnh: " + ex.getMessage(), "Lỗi hệ thống", JOptionPane.ERROR_MESSAGE);
                     } finally {
-                        btnCheckin.setEnabled(true);
+                        btnCheckin.setEnabled(true); // Mở khóa lại nút bấm khi hoàn thành tác vụ
+
+                        // Ép Form làm tươi lại giao diện để hiện chữ ngay lập tức
+                        panelForm.revalidate();
+                        panelForm.repaint();
                     }
                 }
             }.execute();
