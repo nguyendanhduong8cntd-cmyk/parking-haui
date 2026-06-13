@@ -69,7 +69,7 @@ public class HomeAdmin extends javax.swing.JFrame {
         });
 
         txtManage.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
-        txtManage.setText("Quản lý người dùng");
+        txtManage.setText("Quản lý nhân viên");
         txtManage.setPreferredSize(new java.awt.Dimension(169, 40));
         txtManage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

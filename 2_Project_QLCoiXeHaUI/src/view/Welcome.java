@@ -1,196 +1,129 @@
-
 package view;
 
-import javax.swing.JOptionPane;
+import javax.swing.*;
+import java.awt.*;
 
 public class Welcome extends javax.swing.JFrame {
 
+    // Khai báo thủ công các thành phần giao diện để quản lý tập trung
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JButton btnAdmin;
+    private javax.swing.JButton btnStaff;
+    private javax.swing.JButton btnExit;
+    private javax.swing.JPanel panelMainContainer; // Khối panel bọc toàn bộ nội dung
+
     public Welcome() {
-        initComponents();
-        styleUI();
-        setLocationRelativeTo(null);
-        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        initComponentsCustom(); // Tự động dựng giao diện bằng code co giãn
+        styleUI();              // Bơm màu sắc Flat UI hiện đại
+        setLocationRelativeTo(null); // Hiển thị ở chính giữa màn hình khi khởi động
     }
 
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
-
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        btnLoginAdmin = new javax.swing.JButton();
-        btnLoginStaff = new javax.swing.JButton();
-        btnExit = new javax.swing.JButton();
+    // Hàm thiết lập bố cục tự động co giãn thông minh khi phóng to/thu nhỏ màn hình
+    private void initComponentsCustom() {
+        lblTitle = new javax.swing.JLabel("HỆ THỐNG QUẢN LÝ BÃI XE KTPM04", javax.swing.SwingConstants.CENTER);
+        btnAdmin = new javax.swing.JButton("ĐĂNG NHẬP ADMIN");
+        btnStaff = new javax.swing.JButton("ĐĂNG NHẬP STAFF");
+        btnExit = new javax.swing.JButton("THOÁT ỨNG DỤNG");
+        panelMainContainer = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("E-Parking Haui - Welcome");
 
-        jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 36)); // NOI18N
-        jLabel1.setText("WELCOME TO E-PARKING HAUI");
+        // 1. Cửa sổ chính (JFrame) dùng GridBagLayout để ép khối nội dung luôn vào TÂM màn hình khi phóng to
+        getContentPane().setLayout(new java.awt.GridBagLayout());
+        getContentPane().setBackground(new java.awt.Color(245, 247, 250)); // Màu nền xám sáng dịu mắt
 
-        jLabel2.setFont(new java.awt.Font("Helvetica Neue", 2, 18)); // NOI18N
-        jLabel2.setText("Chọn 1 option để bắt đầu");
+        // 2. Thiết lập khối panel trung tâm chứa các nút bấm (Sử dụng BoxLayout theo chiều dọc)
+        panelMainContainer.setLayout(new javax.swing.BoxLayout(panelMainContainer, javax.swing.BoxLayout.Y_AXIS));
+        panelMainContainer.setBackground(new java.awt.Color(245, 247, 250));
 
-        btnLoginAdmin.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
-        btnLoginAdmin.setText("Login with Admin");
-        btnLoginAdmin.setPreferredSize(new java.awt.Dimension(170, 40));
-        btnLoginAdmin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLoginAdminActionPerformed(evt);
-            }
-        });
+        // Căn giữa các thành phần bên trong Panel Container
+        lblTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnAdmin.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnStaff.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnExit.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        btnLoginStaff.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
-        btnLoginStaff.setText("Login with Staff");
-        btnLoginStaff.setPreferredSize(new java.awt.Dimension(170, 40));
-        btnLoginStaff.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLoginStaffActionPerformed(evt);
-            }
-        });
+        // Thiết lập kích thước cố định cho các nút bấm thanh dài sang trọng (Kích thước chuẩn: 450x55)
+        Dimension buttonSize = new Dimension(450, 55);
+        btnAdmin.setMaximumSize(buttonSize); btnAdmin.setPreferredSize(buttonSize);
+        btnStaff.setMaximumSize(buttonSize); btnStaff.setPreferredSize(buttonSize);
+        btnExit.setMaximumSize(buttonSize);   btnExit.setPreferredSize(buttonSize);
 
-        btnExit.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
-        btnExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/exit.png"))); // NOI18N
-        btnExit.setText("Thoát khỏi ứng dụng");
-        btnExit.setPreferredSize(new java.awt.Dimension(95, 40));
-        btnExit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExitActionPerformed(evt);
-            }
-        });
+        // Đổ các thành phần vào Panel và tạo khoảng cách đệm (Spacer) thoáng đãng giữa các nút
+        panelMainContainer.add(lblTitle);
+        panelMainContainer.add(Box.createRigidArea(new Dimension(0, 40)));  // Khoảng cách dưới tiêu đề
+        panelMainContainer.add(btnAdmin);
+        panelMainContainer.add(Box.createRigidArea(new Dimension(0, 20)));  // Khoảng cách giữa các nút
+        panelMainContainer.add(btnStaff);
+        panelMainContainer.add(Box.createRigidArea(new Dimension(0, 20)));
+        panelMainContainer.add(btnExit);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 51, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(46, 46, 46))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(89, 89, 89)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 445, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnLoginStaff, javax.swing.GroupLayout.PREFERRED_SIZE, 445, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnLoginAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 445, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(207, 207, 207)
-                        .addComponent(jLabel2)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(79, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2)
-                .addGap(41, 41, 41)
-                .addComponent(btnLoginAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnLoginStaff, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
-                .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(52, 52, 52))
-        );
+        // 3. Ràng buộc GridBagConstraints để ép panelMainContainer luôn cố định ở trung tâm tuyệt đối
+        java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.fill = java.awt.GridBagConstraints.NONE; // Không kéo giãn méo mó khối Panel
+        gbc.anchor = java.awt.GridBagConstraints.CENTER; // Giữ ở tâm khi bấm phóng to full màn hình
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(50, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(43, Short.MAX_VALUE))
-        );
+        getContentPane().add(panelMainContainer, gbc);
 
-        pack();
-    }// </editor-fold>//GEN-END:initComponents
+        // Gắn hành động chuyển cảnh cho các nút bấm
+        btnAdmin.addActionListener(e -> btnAdminActionPerformed());
+        btnStaff.addActionListener(e -> btnStaffActionPerformed());
+        btnExit.addActionListener(e -> btnExitActionPerformed());
 
-    private void btnLoginAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginAdminActionPerformed
+        setSize(800, 500); // Kích thước cửa sổ mặc định ban đầu cực kỳ cân đối
+    }
+
+    // Logic điều hướng chuyển cảnh sang các phân hệ đăng nhập tương ứng
+    private void btnAdminActionPerformed() {
         this.dispose();
-        LoginAdmin a1 = new LoginAdmin();
-        a1.setVisible(true);
-    }//GEN-LAST:event_btnLoginAdminActionPerformed
+        new LoginAdmin().setVisible(true);
+    }
 
-    private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
-        int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to exit the application?", "Exit Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+    private void btnStaffActionPerformed() {
+        this.dispose();
+        new LoginStaff().setVisible(true);
+    }
 
+    private void btnExitActionPerformed() {
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Bạn có chắc chắn muốn thoát ứng dụng bãi xe không?",
+                "Xác nhận thoát", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (confirm == JOptionPane.YES_OPTION) {
-            System.exit(0); 
+            System.exit(0);
         }
-    }//GEN-LAST:event_btnExitActionPerformed
+    }
 
-    private void btnLoginStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginStaffActionPerformed
-        this.dispose();
-        LoginStaff a1 = new LoginStaff();
-        a1.setVisible(true);
-    }//GEN-LAST:event_btnLoginStaffActionPerformed
+    // Bơm màu sắc Flat UI đồng bộ chuẩn mỹ thuật công nghiệp
+    private void styleUI() {
+        // Định dạng tiêu đề chính
+        lblTitle.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 26));
+        lblTitle.setForeground(new java.awt.Color(44, 62, 80)); // Màu xanh đen đậm đà sang trọng
+
+        // Định dạng nút bấm Đăng nhập Admin (Tone màu xanh dương uy quyền)
+        styleButton(btnAdmin, new java.awt.Color(52, 152, 219));
+
+        // Định dạng nút bấm Đăng nhập Staff (Tone màu xanh lá cây an toàn)
+        styleButton(btnStaff, new java.awt.Color(46, 204, 113));
+
+        // Định dạng nút bấm Thoát ứng dụng (Tone màu đỏ san hô cảnh báo)
+        styleButton(btnExit, new java.awt.Color(231, 76, 60));
+    }
+
+    // Hàm bổ trợ thiết lập thuộc tính đồ họa cho nút bấm Flat UI
+    private void styleButton(javax.swing.JButton btn, java.awt.Color color) {
+        btn.setBackground(color);
+        btn.setForeground(java.awt.Color.WHITE); // Chữ trắng nổi bật trên nền màu
+        btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 16)); // Font chữ nét đậm, kích cỡ 16 to rõ ràng
+        btn.setFocusPainted(false);
+        btn.setBorderPainted(false);
+        btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR)); // Hiển thị hình bàn tay khi di chuột qua
+    }
 
     public static void main(String args[]) {
-
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Welcome().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Welcome().setVisible(true);
         });
     }
-    private void styleUI() {
-
-    // ===== BACKGROUND PANEL =====
-    jPanel1.setBackground(new java.awt.Color(245, 247, 250));
-
-    // ===== TITLE =====
-    jLabel1.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 34));
-    jLabel1.setForeground(new java.awt.Color(25, 42, 86));
-
-    jLabel2.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 22));
-    jLabel2.setForeground(new java.awt.Color(80, 80, 80));
-
-    // ===== BUTTON ADMIN =====
-    btnLoginAdmin.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 16));
-    btnLoginAdmin.setBackground(new java.awt.Color(52, 152, 219));
-    btnLoginAdmin.setForeground(java.awt.Color.WHITE);
-    btnLoginAdmin.setFocusPainted(false);
-    btnLoginAdmin.setBorderPainted(false);
-    btnLoginAdmin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-    // ===== BUTTON STAFF =====
-    btnLoginStaff.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 16));
-    btnLoginStaff.setBackground(new java.awt.Color(46, 204, 113));
-    btnLoginStaff.setForeground(java.awt.Color.WHITE);
-    btnLoginStaff.setFocusPainted(false);
-    btnLoginStaff.setBorderPainted(false);
-    btnLoginStaff.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-    // ===== BUTTON EXIT =====
-    btnExit.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 16));
-    btnExit.setBackground(new java.awt.Color(231, 76, 60));
-    btnExit.setForeground(java.awt.Color.WHITE);
-    btnExit.setFocusPainted(false);
-    btnExit.setBorderPainted(false);
-    btnExit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-    // ===== BUTTON SIZE UNIFORM =====
-    btnLoginAdmin.setPreferredSize(new java.awt.Dimension(180, 45));
-    btnLoginStaff.setPreferredSize(new java.awt.Dimension(180, 45));
-    btnExit.setPreferredSize(new java.awt.Dimension(120, 40));
-}
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnExit;
-    private javax.swing.JButton btnLoginAdmin;
-    private javax.swing.JButton btnLoginStaff;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
-    // End of variables declaration//GEN-END:variables
 }
