@@ -1,0 +1,13 @@
+===================================
+        E-PARKING HAUI RECEIPT     
+===================================
+ Ticket ID    : VX036
+ License Plate: 50F-12345
+ Vehicle Type : Car
+ Parking Date : 2026-06-14
+ Time In      : 01:19:39
+ Time Out     : 10:17:02
+-----------------------------------
+ TOTAL CASH   : 50000 VND
+===================================
+      THANK YOU! SEE YOU AGAIN!    
